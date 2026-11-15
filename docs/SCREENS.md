@@ -1,6 +1,6 @@
 # SafeSteps: Screens & Flow
 
-Every screen in SafeSteps: who can open it, who owns it, how you get in and out, and what it shows. Read it together with `docs/PLAN.md` (models, API, timeline), **Style sheet v1** (all visual values) and `GLOSSARY.md` (the words we use).
+Every screen in SafeSteps: who can open it, who owns it, how you get in and out, and what it shows. Read it together with `docs/PLAN.md` (models, API, timeline), [Style sheet v1](design/Style%20sheet%20v1.pdf) (all visual values), the [Choking flow mockup](design/SafeSteps%20%E2%80%94%20Choking%20flow.pdf) and `GLOSSARY.md` (the words we use).
 
 Decisions were made in the three screen-flow issues: Person 1 (#1), Person 2 (#11), Person 3 (#12).
 
