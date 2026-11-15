@@ -52,9 +52,9 @@ HOME
 
 ## 3. Team Split
 
-Write the names in. Each person owns their feature **end to end**: UI, API routes, model and testing.
+Each person owns their feature **end to end**: UI, API routes, model and testing.
 
-### Person 1: Core + Emergency Mode + Prepare (`______`)
+### Person 1: Core + Emergency Mode + Prepare (Ayesha)
 - Navigation and shared layout (header, tab bar, Call 1122 bar, shared loading/empty/error/offline states)
 - Home screen
 - Emergency Mode
@@ -64,7 +64,7 @@ Write the names in. Each person owns their feature **end to end**: UI, API route
 - Saved Contacts
 - **Final integration** (merging, end-to-end flow check, deployment)
 
-### Person 2: Learn + Guide Admin (`______`)
+### Person 2: Learn + Guide Admin (Hafsa)
 - Learn screen (one list, Medical and Disasters sections)
 - Guide page (renders both guide formats)
 - Content for all 8 guides, written into a seed file
