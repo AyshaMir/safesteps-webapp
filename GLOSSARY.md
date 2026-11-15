@@ -1,6 +1,6 @@
 # SafeSteps
 
-SafeSteps is a mobile website that helps people learn about emergencies, get ready for them, and respond quickly when one happens.
+SafeSteps is a mobile website that helps people learn about emergencies, prepare for them, and respond quickly when one happens.
 
 ## Language
 
@@ -26,9 +26,9 @@ One screen in a flow. Either an **instruction** (picture, short sentence, Next) 
 The shared screen at the end of every flow, with after-care, other emergency numbers, saved-contact links, and the way into the full guide.
 _Avoid_: Done screen, summary
 
-**Get ready**:
-The area where a person prepares before an emergency: emergency plan, kit checklist, saved contacts. "Prepare" in code and routes.
-_Avoid_: Prepare (in UI text), preparedness section
+**Prepare**:
+The area where a person gets ready before an emergency: emergency plan, kit checklist, saved contacts. Same word in the UI and in code (`prepare`), matching the tagline Learn · Prepare · Respond.
+_Avoid_: Get ready, preparedness section
 
 **Learn**:
 The area for reading full guides calmly, before or after an emergency.

@@ -14,7 +14,7 @@ SafeSteps helps people **Learn** about emergencies, **Prepare** before they happ
 | 1 | **4 disaster guides** | Earthquake, Fire, Heavy Rainfall, Heatwave. Format: Before / During / After / Do Not |
 | 2 | **4 medical guides** | Severe Bleeding, Burns, Choking, Fainting. Format: Recognize / What to Do / What Not to Do / When to Seek Help |
 | 3 | **Learn** | One list (Medical, Disasters) → full guide |
-| 4 | **Get ready** (`prepare` in code) | Emergency Plan, Kit Checklist (with preparedness %), Saved Contacts |
+| 4 | **Prepare** | Emergency Plan, Kit Checklist (with preparedness %), Saved Contacts |
 | 5 | **Emergency Mode** | Choose emergency → big-button, minimal-text steps, one at a time, with yes/no questions → What now screen |
 | 6 | **Call 1122 bar** | One tap dials `tel:1122` on every user screen; other numbers and saved contacts are on the What now screen |
 | 7 | **Login / Signup** | Needed for plan, contacts, checklist progress and profile |
@@ -35,7 +35,7 @@ SafeSteps helps people **Learn** about emergencies, **Prepare** before they happ
 HOME
  ├── I need help now ─ picker → step-by-step (yes/no questions) → What now (other numbers, saved contacts)
  ├── Learn ─────────── Medical / Disasters list → read guide (→ Start step-by-step)
- └── Get ready ─────── hub → emergency plan / kit checklist / saved contacts   (login required)
+ └── Prepare ───────── hub → emergency plan / kit checklist / saved contacts   (login required)
 
  Call 1122 bar is fixed to the bottom of EVERY user screen (not admin)
 ```
@@ -43,7 +43,7 @@ HOME
 **Full screen list and per-screen details: [`docs/SCREENS.md`](SCREENS.md).**
 
 - **Public, no login:** Home, Learn, Guide pages, Emergency Mode, What now, Call 1122 bar. In an emergency nobody should be blocked by a login screen.
-- **Login required:** Get ready (plan, checklist, contacts) and Profile. Logged out, Get ready shows an intro with Sign in / Create account instead of redirecting.
+- **Login required:** Prepare (plan, checklist, contacts) and Profile. Logged out, Prepare shows an intro with Sign in / Create account instead of redirecting.
 - **Admin only:** Admin Dashboard.
 
 > **Emergency numbers:** confirm these before launch. Defaults for Pakistan: **1122** (Rescue), **15** (Police), **16** (Fire), **115** (Edhi). Keep them in one config file, `client/src/config/emergencyNumbers.js`, so nobody hardcodes them.
@@ -62,7 +62,6 @@ Write the names in. Each person owns their feature **end to end**: UI, API route
 - Emergency Plan
 - Kit Checklist (+ preparedness %)
 - Saved Contacts
-- Admin tab for **checklist items** (fits inside the dashboard shell Person 2 builds)
 - **Final integration** (merging, end-to-end flow check, deployment)
 
 ### Person 2: Learn + Guide Admin (`______`)
@@ -74,7 +73,7 @@ Write the names in. Each person owns their feature **end to end**: UI, API route
 - Admin Dashboard shell + add / edit / publish / unpublish guides
 - Offline caching of guides (service worker, no install)
 
-### Person 3: Auth + User/Admin Access (`______`)
+### Person 3: Auth + User/Admin Access + Checklist Admin (Ibad)
 - Signup / login / logout
 - JWT + bcrypt
 - User / admin roles
@@ -83,6 +82,7 @@ Write the names in. Each person owns their feature **end to end**: UI, API route
 - Admin access control
 - Backend User model
 - Seed script that creates the first admin account
+- **Checklist items master list:** `ChecklistItem` model, `seed/checklist.json`, `GET /checklist`, and the Admin: Checklist Items tab (fits inside the dashboard shell Person 2 builds)
 
 ### Hand-offs between people (agree on these in week 1)
 
@@ -92,7 +92,8 @@ Write the names in. Each person owns their feature **end to end**: UI, API route
 | Person 3 | `AuthContext` (`user`, `token`, `login()`, `logout()`) + `ProtectedRoute` / `AdminRoute` | Person 1, 2 |
 | Person 3 | `api.js` fetch wrapper that attaches `Authorization: Bearer <token>` | Everyone |
 | Person 2 | `GET /api/guides` and `GET /api/guides/:slug` | Person 1 (Emergency Mode reads steps from guides) |
-| Person 2 | Admin dashboard layout with tabs | Person 1 (Checklist Items tab) |
+| Person 2 | Admin dashboard layout with tabs | Person 3 (Checklist Items tab) |
+| Person 3 | `GET /api/checklist` (published checklist items) | Person 1 (Kit Checklist + preparedness %) |
 | Person 1 | `Layout` component + shared UI (Button, Card, PageHeader) | Person 2, 3 |
 
 **Until a hand-off is ready, mock it.** For example, Person 1 can build Emergency Mode against a local JSON guide before the API exists.
@@ -133,14 +134,14 @@ Person 3 also does Profile, which gets no formal wireframe. Screens beyond the 7
 | `/emergency` | Pick emergency (big tiles) | Public | P1 |
 | `/emergency/:slug` | Step-by-step mode | Public | P1 |
 | `/emergency/:slug/done` | What now | Public | P1 |
-| `/prepare` | Get ready hub (shows preparedness %); intro when logged out | User | P1 |
+| `/prepare` | Prepare hub (shows preparedness %); intro when logged out | User | P1 |
 | `/prepare/plan` | Emergency Plan | User | P1 |
 | `/prepare/checklist` | Kit Checklist | User | P1 |
 | `/prepare/contacts` | Saved Contacts | User | P1 |
 | `/login`, `/signup` | Auth | Public | P3 |
 | `/profile` | Account | User | P3 |
 | `/admin` | Admin: Guides | Admin | P2 |
-| `/admin/checklist` | Admin: Checklist Items | Admin | P1 |
+| `/admin/checklist` | Admin: Checklist Items | Admin | P3 |
 | `/admin/guides/new`, `/admin/guides/:id/edit` | Guide editor | Admin | P2 |
 
 ---
@@ -185,7 +186,7 @@ One model handles both formats: `category` decides which `sections` are used.
 }
 ```
 
-### ChecklistItem (Person 1, the admin-managed master list)
+### ChecklistItem (Person 3, the admin-managed master list)
 ```js
 { name: String, category: String /* water, food, medical, documents… */, order: Number, published: Boolean }
 ```
@@ -236,11 +237,15 @@ Logout happens on the client: delete the token. Tokens expire after 7 days.
 |--------|-------|--------|-------|
 | GET | `/prepare` | User | plan + contacts + checked items + score |
 | PUT | `/prepare/plan` | User | |
-| GET | `/checklist` | Public | published items |
 | PUT | `/prepare/checklist` | User | `{ checkedItems: [ids] }` |
 | POST | `/prepare/contacts` | User | |
 | PUT | `/prepare/contacts/:id` | User | |
 | DELETE | `/prepare/contacts/:id` | User | |
+
+### Checklist items (Person 3)
+| Method | Route | Access | Notes |
+|--------|-------|--------|-------|
+| GET | `/checklist` | Public | published items |
 | GET/POST/PUT | `/admin/checklist[/:id]` | Admin | manage the master list (no delete: unpublish instead) |
 
 ---
@@ -261,7 +266,7 @@ safesteps-webapp/
 │       │   ├── learn/           # P2
 │       │   ├── emergency/       # P1
 │       │   ├── prepare/         # P1
-│       │   └── admin/           # P2 (+ P1 checklist tab)
+│       │   └── admin/           # P2 (+ P3 checklist tab)
 │       ├── App.jsx              # routes
 │       └── main.jsx
 ├── server/                      # Express (already exists)
@@ -287,7 +292,7 @@ SafeSteps is a mobile **website** used in the browser; there is no install scree
 - **Cache `GET /api/guides*` responses** (stale-while-revalidate), so every guide a user has opened, plus Emergency Mode, works offline.
 - After the first load, quietly fetch all 8 published guides once so the whole guide set is cached right away.
 - `tel:` links work without internet, so the Help button always works.
-- Get ready shows the last loaded data **read-only** offline, with editing switched off. A read-only copy of saved contacts is kept so the What now screen works offline.
+- Prepare shows the last loaded data **read-only** offline, with editing switched off. A read-only copy of saved contacts is kept so the What now screen works offline.
 - **Storage is not guaranteed:** iPhone Safari deletes saved site data after 7 days without a visit, and clearing browser data wipes it. The offline chip says "Guides saved on this phone" only after checking the cache, with a short "can be cleared" note.
 - **Test it:** Chrome DevTools → Network → Offline, then open every guide and Emergency Mode.
 
@@ -327,12 +332,12 @@ Commit a `.env.example` for each one with the keys but no values.
 
 ## 12. Timeline (6 weeks)
 
-| Week | Goal | P1 (Core/Emergency/Prepare) | P2 (Learn/Guides) | P3 (Auth) |
+| Week | Goal | P1 (Core/Emergency/Prepare) | P2 (Learn/Guides) | P3 (Auth + Checklist admin) |
 |------|------|------------------------------|-------------------|-----------|
 | **1** Planning & design | Everyone agrees on the contracts | Wireframes: Home, Emergency Mode, Prepare. Set up `client/` with Vite + Router + Layout | Wireframes: Learn, Guide, Admin. Write the content for all 8 guides | Wireframes: Login/Signup, Profile. Mongo Atlas setup, DB connection |
 | **2** Core build | Guides + auth + Emergency Mode run | Emergency Mode (mock data), Help button, Home | Guide model, seed, guide APIs, Learn + Guide pages | User model, signup/login, JWT, middleware, AuthContext |
 | **3** Prepare | Logged-in users can prepare | Plan, Checklist + %, Contacts (API + UI) | Category filtering, wire Emergency Mode to the real API with P1 | Protected routes, Profile page, roles |
-| **4** Admin | Admins manage content | Checklist Items admin tab | Admin dashboard + guide editor + publish toggle | AdminRoute, admin seed account, access-control checks |
+| **4** Admin | Admins manage content | Buffer: catch up on weeks 2–3 | Admin dashboard + guide editor + publish toggle | AdminRoute, admin seed account, access-control checks, Checklist Items model + seed + API + admin tab |
 | **5** Testing | Fix, polish, PWA | Responsive pass on all screens | PWA / offline caching | Security pass (no password hash leaks, 401/403 handled) |
 | **6** Launch | Ship it | Final integration + Render deploy | Final guide content review | Bug fixes |
 
@@ -343,7 +348,7 @@ All three of you share the final report and demo prep in week 6.
 ## 13. Testing Checklist (Week 5)
 
 - [ ] Signup, login and logout work; a wrong password shows a friendly error
-- [ ] A logged-out user who opens `/prepare` sees the Get ready intro with Sign in / Create account
+- [ ] A logged-out user who opens `/prepare` sees the Prepare intro with Sign in / Create account
 - [ ] A normal user cannot open `/admin`, and the API returns 403
 - [ ] All 8 guides show the correct sections for their category
 - [ ] Unpublished guides are hidden from Learn and Emergency Mode
@@ -373,6 +378,6 @@ All three of you share the final report and demo prep in week 6.
 1. Open the site in the phone's browser
 2. **Learn:** Natural → Earthquake → read the guide
 3. **Emergency Mode:** Choking → answer "Can they cough or talk?" → step through → What now → tap Call
-4. Sign up → **Get ready:** fill in the plan, tick the checklist (show the % rising), add a contact
+4. Sign up → **Prepare:** fill in the plan, tick the checklist (show the % rising), add a contact
 5. Turn on airplane mode → guides and Emergency Mode still work
 6. Log in as admin → edit a guide → unpublish it → show it disappear for users

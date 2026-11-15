@@ -12,9 +12,9 @@ Decisions were made in the three screen-flow issues: Person 1 (#1), Person 2 (#1
 - **Two layouts.** *Panic* is for Emergency Mode only: huge text, one action, no tab bar. *Calm* is for everything else. **Red means Call 1122 and nothing else.** Warnings, "Don't" advice and form errors use warning amber with a "!".
 - **Call 1122 bar:** red, full width, fixed to the bottom of every user-facing screen (above the tab bar on Calm screens), including Login and Profile. One tap dials `tel:1122`, no menu. **Not shown on admin pages.**
 - **Calm header:** "SafeSteps" on the left; on the right, the offline chip and the account spot ("Sign in" or the user's name).
-- **Tab bar (Calm, phone):** Home · Learn · Get ready. **Desktop:** the tabs move into the header as links; content sits in a centred column of about 720px; Emergency Mode stays a phone-width column in the centre; the Call 1122 bar stays at the bottom.
-- **Login:** only Get ready and Profile need it. Learn, Guide and Emergency Mode never do.
-- **Words:** users see "Get ready" and "I need help now"; code says `prepare` and `emergency`.
+- **Tab bar (Calm, phone):** Home · Learn · Prepare. **Desktop:** the tabs move into the header as links; content sits in a centred column of about 720px; Emergency Mode stays a phone-width column in the centre; the Call 1122 bar stays at the bottom.
+- **Login:** only Prepare and Profile need it. Learn, Guide and Emergency Mode never do.
+- **Words:** users see "Prepare" and "I need help now"; code says `prepare` and `emergency`. "Prepare" keeps the tagline Learn · Prepare · Respond.
 
 ### Shared states (Person 1 builds them; each screen's owner writes the wording)
 
@@ -35,7 +35,7 @@ Decisions were made in the three screen-flow issues: Person 1 (#1), Person 2 (#1
 flowchart TD
   Home["Home"] -->|I need help now| Picker["Picker: What is happening?"]
   Home -->|Learn link / tab| Learn
-  Home -->|Get ready link / tab| GR{"Logged in?"}
+  Home -->|Prepare link / tab| GR{"Logged in?"}
   Home -->|"N% ready card (logged in)"| Hub
   Picker --> Step["Emergency steps"]
   Step -->|"Next / YES / NO"| Step
@@ -44,8 +44,8 @@ flowchart TD
   WhatNow -->|Back to home| Home
   Learn --> Guide["Guide page"]
   Guide -->|Start step-by-step| Step
-  GR -->|no| Intro["Get ready intro"]
-  GR -->|yes| Hub["Get ready hub"]
+  GR -->|no| Intro["Prepare intro"]
+  GR -->|yes| Hub["Prepare hub"]
   Intro -->|Sign in / Create account| Login["Login / Signup"]
   Login -->|back to where you came from| Hub
   Hub --> Plan["Emergency plan"]
@@ -71,8 +71,8 @@ The Call 1122 bar is on every user-facing screen, so it isn't drawn.
 | 4 | What now | `/emergency/:slug/done` | Calm | Public | P1 |
 | 5 | Learn | `/learn` | Calm | Public | P2 |
 | 6 | Guide page | `/guides/:slug` | Calm | Public | P2 |
-| 7 | Get ready hub | `/prepare` | Calm | User (logged out → intro) | P1 |
-| 8 | Get ready intro | any `/prepare*` while logged out | Calm | Public | P1 |
+| 7 | Prepare hub | `/prepare` | Calm | User (logged out → intro) | P1 |
+| 8 | Prepare intro | any `/prepare*` while logged out | Calm | Public | P1 |
 | 9 | Emergency plan | `/prepare/plan` | Calm | User | P1 |
 | 10 | Kit checklist | `/prepare/checklist` | Calm | User | P1 |
 | 11 | Emergency contacts | `/prepare/contacts` | Calm | User | P1 |
@@ -81,7 +81,7 @@ The Call 1122 bar is on every user-facing screen, so it isn't drawn.
 | 14 | Profile | `/profile` | Calm | User | P3 |
 | 15 | Admin: Guides | `/admin` | Admin (desktop) | Admin | P2 |
 | 16 | Guide editor | `/admin/guides/new`, `/admin/guides/:id/edit` | Admin (desktop) | Admin | P2 |
-| 17 | Admin: Checklist Items | `/admin/checklist` | Admin (desktop) | Admin | P1 |
+| 17 | Admin: Checklist Items | `/admin/checklist` | Admin (desktop) | Admin | P3 |
 | 18 | No access | any `/admin*` for a non-admin | Calm | User | P3 |
 
 Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owners design the rest from the style sheet, and **Person 1 does the final consistency pass**.
@@ -92,8 +92,8 @@ Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owne
 
 ### 1. Home (P1)
 - A large **"I need help now"** card that opens the Picker.
-- Small **Learn** and **Get ready** links under it.
-- **Logged in only:** a small "You're N% ready" card below the links, which opens the Get ready hub.
+- Small **Learn** and **Prepare** links under it.
+- **Logged in only:** a small "You're N% ready" card below the links, which opens the Prepare hub.
 - Nothing else. Header, tab bar and Call 1122 bar as usual.
 
 ### 2. Picker: "What is happening?" (P1)
@@ -126,13 +126,13 @@ Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owne
   - Disasters: **Before · During · After · Don't**
 - **Don't** items appear in warning amber with "!".
 
-### 7. Get ready hub (P1)
+### 7. Prepare hub (P1)
 - **Preparedness %** at the top: ticked published items ÷ all published items.
 - Three cards, each with a one-line status: **Emergency plan** · **Kit checklist** ("12 of 20 packed") · **Emergency contacts** ("2 contacts").
 
-### 8. Get ready intro (P1)
-- Shown instead of the hub (or any Get ready screen) when logged out. There is no redirect.
-- One line on what Get ready is, plus **Sign in** and **Create account**.
+### 8. Prepare intro (P1)
+- Shown instead of the hub (or any Prepare screen) when logged out. There is no redirect.
+- One line on what Prepare is, plus **Sign in** and **Create account**.
 
 ### 9. Emergency plan (P1)
 - **Meeting points** (a list you can add to) and **notes**. Contacts are not part of the plan; they live only on the Contacts screen.
@@ -144,7 +144,7 @@ Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owne
 ### 11. Emergency contacts (P1)
 - Exactly as in the mockup: the contacts list (with **Edit** on each person), and the **Add a person** form below it on the same screen (Name, Phone, "Put this person first", Save). Edit fills the same form.
 
-**Get ready while offline (9–11):** the last loaded data is shown read-only with the offline chip. Save, Add and ticking are switched off.
+**Prepare while offline (9–11):** the last loaded data is shown read-only with the offline chip. Save, Add and ticking are switched off.
 
 ### 12–13. Login / Signup (P3)
 - **Signup:** name, email, password (at least 8 characters). **Login:** email, password. Each links to the other.
@@ -153,7 +153,7 @@ Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owne
 
 ### 14. Profile (P3)
 - Opened from the header's account spot.
-- Editable name, read-only email, change password, **Log out**, and **Delete account** (with a confirm step warning that your Get ready data is deleted too).
+- Editable name, read-only email, change password, **Log out**, and **Delete account** (with a confirm step warning that your Prepare data is deleted too).
 - **Admins only:** an **Admin dashboard** link.
 
 ### 15. Admin: Guides (P2)
@@ -168,7 +168,7 @@ Screens 1–6, 12–13, 15 and the hub (7) are covered by the 7 wireframes. Owne
   - **Emergency Mode steps:** an ordered list. Each step has a type, text and an optional picture; questions also have **YES →** / **NO →** dropdowns (a step number or "End").
 - **Save as draft** / **Publish**. You can unpublish a guide but not delete it.
 
-### 17. Admin: Checklist Items (P1)
+### 17. Admin: Checklist Items (P3)
 - Items grouped by category. Each row has the name, a Draft / Published toggle and Edit. An **Add item** form at the bottom (name, category, Save).
 - You can unpublish an item but not delete it.
 
