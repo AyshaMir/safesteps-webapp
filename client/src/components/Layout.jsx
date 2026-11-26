@@ -1,11 +1,12 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import Call1122Bar from './Call1122Bar';
+import { BookIcon, ClipboardCheckIcon, HomeIcon } from './icons';
 
 const TABS = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/learn', label: 'Learn' },
-  { to: '/prepare', label: 'Prepare' },
+  { to: '/', label: 'Home', end: true, Icon: HomeIcon },
+  { to: '/learn', label: 'Learn', Icon: BookIcon },
+  { to: '/prepare', label: 'Prepare', Icon: ClipboardCheckIcon },
 ];
 
 // Calm layout: header, centred content column, tab bar (phone) and Call 1122 bar.
@@ -46,6 +47,9 @@ export default function Layout({ children, tabs = true }) {
           <nav className="tab-bar" aria-label="Main">
             {TABS.map((t) => (
               <NavLink key={t.to} to={t.to} end={t.end} className="tab-bar__tab">
+                <span className="tab-bar__pill">
+                  <t.Icon size={22} />
+                </span>
                 {t.label}
               </NavLink>
             ))}

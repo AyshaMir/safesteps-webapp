@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PlaceholderPage from './components/PlaceholderPage';
+import HomePage from './features/home/HomePage';
 import ProtectedRoute from './features/auth/ProtectedRoute';
 import AdminRoute from './features/auth/AdminRoute';
 import LoginPage from './features/auth/LoginPage';
@@ -16,7 +17,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Person 1 */}
-          <Route path="/" element={<PlaceholderPage title="SafeSteps" owner="Ayesha" />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/emergency/*" element={<PlaceholderPage title="I need help now" owner="Ayesha" />} />
           <Route path="/prepare/*" element={<PlaceholderPage title="Prepare" owner="Ayesha" />} />
 
