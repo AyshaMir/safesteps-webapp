@@ -1,10 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import Call1122Bar from '../../components/Call1122Bar'
-import { ArrowLeft } from '@phosphor-icons/react'
+import Layout from '../../components/Layout'
+import { PhoneCall } from '@phosphor-icons/react'
+import { emergencyNumbers } from '../../config/emergencyNumbers'
+
 
 const mockContacts = [
-  { name: 'Mum', phone: '03001234567', first: true },
-  { name: 'Sara', phone: '03111234567', first: false },
+  { name: 'Mum', phone: '', first: true },
+  { name: 'Sara', phone: '', first: false },
 ]
 
 function WhatNow() {
@@ -12,78 +14,90 @@ function WhatNow() {
   const { slug } = useParams()
 
   const contacts = [...mockContacts].sort(
-    (a, b) => Number(b.first) - Number(a.first),
+    (a, b) => Number(b.first) - Number(a.first)
   )
 
   return (
-    <div className="what-now-page">
-      <header className="panic-header">
-        <button
-          className="back-button"
-          type="button"
-          onClick={() => navigate(`/emergency/${slug}`)}
-        >
-          <ArrowLeft size={26} weight="bold" />
-        </button>
-      </header>
+    <Layout>
+      <section className="what-now-content">
 
-      <main className="what-now-content">
         <div className="what-now-heading">
           <h1>What now?</h1>
-          <p>Stay with them and keep monitoring the situation.</p>
+          <p>Find additional help and support below.</p>
         </div>
 
+        {/* Other emergency numbers */}
         <section className="what-now-section">
           <h2>Other emergency numbers</h2>
 
-          <a className="emergency-number-card" href="tel:15">
-            <span>
-              <strong>Police</strong>
-              <small>15</small>
-            </span>
-            <span>Call</span>
-          </a>
-
-          <a className="emergency-number-card" href="tel:16">
-            <span>
-              <strong>Fire</strong>
-              <small>16</small>
-            </span>
-            <span>Call</span>
-          </a>
-
-          <a className="emergency-number-card" href="tel:115">
-            <span>
-              <strong>Edhi</strong>
-              <small>115</small>
-            </span>
-            <span>Call</span>
-          </a>
-        </section>
-
-        <section className="what-now-section">
-          <h2>Your contacts</h2>
-
-          {contacts.map((contact) => (
+          {emergencyNumbers.map(service => (
             <a
-              key={contact.phone}
-              className="contact-call-card"
-              href={`tel:${contact.phone}`}
+              key={service.name}
+              className="emergency-number-card"
+              href={`tel:${service.phone}`}
             >
               <div>
-                <strong>
-                  {contact.name}
-                  {contact.first && <span className="first-contact"> First</span>}
-                </strong>
-                <small>{contact.phone}</small>
+                <strong>{service.name}</strong>
+                <small>{service.phone}</small>
               </div>
 
-              <span>Call</span>
+              <span className="what-now-call">
+                <PhoneCall size={22} weight="duotone" />
+                Call
+              </span>
             </a>
           ))}
         </section>
 
+        {/* Saved emergency contacts */}
+        <section className="what-now-section">
+          <h2>Your contacts</h2>
+
+          {contacts.map(contact => (
+            <div
+              key={contact.name}
+              className="contact-call-card"
+            >
+              <div>
+                <strong>
+                  {contact.name}
+
+                  {contact.first && (
+                    <span className="first-contact">
+                      First
+                    </span>
+                  )}
+                </strong>
+
+                <small>
+                  {contact.phone || 'Demo contact'}
+                </small>
+              </div>
+
+              {contact.phone ? (
+                <a
+                  className="what-now-call"
+                  href={`tel:${contact.phone}`}
+                >
+                  <PhoneCall size={22} weight="duotone" />
+                  Call
+                </a>
+              ) : (
+                <button
+                  className="what-now-call"
+                  disabled
+                >
+                  <PhoneCall size={22} weight="duotone" />
+                  Call
+                </button>
+              )}
+            </div>
+          ))}
+        </section>
+
+        {/* Navigation */}
         <section className="what-now-actions">
+
           <button
             className="what-now-button primary"
             onClick={() => navigate(`/guides/${slug}`)}
@@ -97,11 +111,10 @@ function WhatNow() {
           >
             Back to home
           </button>
-        </section>
-      </main>
 
-      <Call1122Bar />
-    </div>
+        </section>
+      </section>
+    </Layout>
   )
 }
 

@@ -1,3 +1,29 @@
+/* SafeSteps — global stylesheet
+   SECTION INDEX (search by section number or screen name)
+   01. General — theme, reset, typography and accessibility
+   02. Shared layout — header, navigation and Call 1122
+   03. Shared reusable components — buttons, cards, headers and contact avatars
+   04. Shared UI states — loading, empty, error and offline
+   05. Home — greeting, emergency button, readiness and contact shortcut
+   06. Home — contact bottom sheet
+   07. Emergency mode — shared Panic layout
+   08. Emergency Picker — medical and disaster tiles
+   09. Emergency Steps — illustrations, progress and actions
+   10. What Now — additional help, contacts and navigation
+   11. Prepare — shared heading, progress and save controls
+   12. Prepare hub — feature cards
+   13. Prepare intro — signed-out screen
+   14. Emergency Plan — meeting points and notes
+   15. Kit Checklist — categories and checkboxes
+   16. Emergency Contacts — saved contacts and form
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+
+/* ============================================================
+   01. General — theme, reset, typography and accessibility
+   ============================================================ */
+
 :root {
   --bg: #fbf8f3;
   --surface: #ffffff;
@@ -66,6 +92,35 @@ button {
   cursor: pointer;
 }
 
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+p {
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+:where(button, a, input, textarea):focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 4px;
+}
+
+/* ============================================================
+   02. Shared layout — header, navigation and Call 1122
+   ============================================================ */
+
 .app-shell {
   min-height: 100vh;
   background: var(--bg);
@@ -100,6 +155,7 @@ button {
   display: grid;
   place-items: center;
   font-size: 20px;
+  padding: 0;
 }
 
 .page-content {
@@ -125,6 +181,7 @@ button {
 
   font-size: 24px;
   font-weight: 800;
+  gap: 12px;
 
   z-index: 20;
 }
@@ -152,32 +209,22 @@ button {
   justify-content: center;
 
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .bottom-nav a.active {
   color: var(--teal);
 }
 
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
+.bottom-nav svg {
+  flex-shrink: 0;
 }
 
-h2 {
-  font-size: 30px;
-  line-height: 1.15;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-p {
-  color: var(--text-muted);
-  font-size: 17px;
-  line-height: 1.5;
+.desktop-nav {
+  display: none;
 }
 
 @media (min-width: 768px) {
@@ -204,6 +251,230 @@ p {
     bottom: 0;
   }
 }
+
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .desktop-nav a {
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .desktop-nav a:hover {
+    background: var(--teal-light);
+  }
+
+  .desktop-nav a.active {
+    background: var(--teal-light);
+    color: var(--teal);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    padding-top: 24px;
+  }
+}
+
+/* ============================================================
+   03. Shared reusable components — buttons, cards, headers and contact avatars
+   ============================================================ */
+
+.back-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f1ede7;
+  color: var(--navy);
+  font-size: 28px;
+  display: flex;
+  place-items: center;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.back-button svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.card-label {
+  color: var(--text-muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.card-arrow {
+  font-size: 34px;
+  color: var(--text-muted);
+}
+
+.contact-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.shared-button {
+  min-height: 56px;
+  padding: 14px 24px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.shared-button.primary {
+  background: var(--teal);
+  color: white;
+}
+
+.shared-button.secondary {
+  background: var(--surface);
+  color: var(--teal);
+  border: 2px solid var(--teal);
+}
+
+.shared-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shared-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+}
+
+.shared-page-header {
+  margin-bottom: 28px;
+}
+
+.shared-page-header > .back-button {
+  margin-bottom: 24px;
+}
+
+.shared-page-header h2 {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   04. Shared UI states — loading, empty, error and offline
+   ============================================================ */
+
+.ui-state {
+  padding: 32px 20px;
+  margin-bottom: 20px;
+  border-radius: 24px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.ui-state h3,
+.ui-state p {
+  margin: 0;
+}
+
+.ui-state button {
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--teal);
+  color: white;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+.empty-state {
+  background: var(--teal-light);
+  color: var(--teal);
+}
+
+.error-state {
+  background: var(--amber-light);
+  color: var(--amber);
+}
+
+.error-state button {
+  background: var(--amber);
+}
+
+.offline-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  background: var(--amber-light);
+  color: var(--amber);
+}
+
+.offline-state p {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton {
+  background: #e8e2da;
+  border-radius: 16px;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-heading {
+  width: 45%;
+  height: 32px;
+}
+
+.skeleton-card {
+  width: 100%;
+  height: 96px;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   05. Home — greeting, emergency button, readiness and contact shortcut
+   ============================================================ */
 
 .home-page {
   display: flex;
@@ -273,25 +544,18 @@ p {
   font-weight: 800;
 }
 
-.card-label {
-  color: var(--text-muted);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.card-arrow {
-  font-size: 34px;
-  color: var(--text-muted);
-}
-
 .readiness-ring {
   width: 62px;
   height: 62px;
   border-radius: 50%;
 
-  border: 8px solid var(--teal-light);
-  border-top-color: var(--teal);
-  border-right-color: var(--teal);
+  position: relative;
+  flex-shrink: 0;
+  border: none;
+  background: conic-gradient(
+    var(--teal) var(--progress),
+    var(--teal-light) 0
+  );
 
   display: grid;
   place-items: center;
@@ -300,11 +564,17 @@ p {
   font-weight: 800;
   color: var(--teal);
 
-  transform: rotate(-20deg);
+  transform: none;
 }
 
 .readiness-ring span {
-  transform: rotate(20deg);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  transform: none;
 }
 
 .contact-avatars {
@@ -341,10 +611,6 @@ p {
 }
 
 @media (max-width: 480px) {
-  .page-content {
-    padding-top: 24px;
-  }
-
   .home-greeting {
     margin-bottom: 42px;
   }
@@ -362,887 +628,9 @@ p {
   }
 }
 
-.panic-page {
-  min-height: 100vh;
-  background: var(--bg);
-  padding-bottom: 86px;
-}
-
-.panic-header {
-  height: 74px;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-}
-
-.back-button {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #f1ede7;
-  color: var(--navy);
-  font-size: 28px;
-  display: grid;
-  place-items: center;
-}
-
-.picker-content {
-  width: min(100%, 720px);
-  margin: 0 auto;
-  padding: 8px 22px 28px;
-}
-
-.picker-content h1 {
-  font-size: 38px;
-  line-height: 1.1;
-  margin-bottom: 24px;
-}
-
-.emergency-section {
-  margin-bottom: 28px;
-}
-
-.emergency-section h2 {
-  font-size: 17px;
-  letter-spacing: 0.3px;
-  margin-bottom: 12px;
-  color: var(--text-muted);
-}
-
-.emergency-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.emergency-tile {
-  min-height: 160px;
-  border-radius: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--navy);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-
-  padding: 18px;
-  text-align: center;
-
-  font-size: 20px;
-  line-height: 1.15;
-  font-weight: 800;
-
-  box-shadow: 0 2px 8px rgba(28, 37, 65, 0.04);
-}
-
-.emergency-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 28px;
-}
-
-.emergency-tile.medical .emergency-icon {
-  background: var(--teal-light);
-  color: var(--teal);
-}
-
-.emergency-tile.disaster .emergency-icon {
-  background: var(--amber-light);
-  color: var(--amber);
-}
-
-.emergency-tile:active {
-  transform: scale(0.98);
-}
-
-.emergency-picker-page .call-1122-bar {
-  bottom: 0;
-}
-
-@media (max-width: 480px) {
-  .picker-content h1 {
-    font-size: 34px;
-  }
-
-  .emergency-tile {
-    min-height: 150px;
-    font-size: 18px;
-  }
-}
-
-.emergency-step-page {
-  padding-bottom: 86px;
-}
-
-.emergency-step-page .panic-header {
-  position: relative;
-  justify-content: flex-start;
-}
-
-.progress-dots {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-
-  display: flex;
-  gap: 8px;
-}
-
-.progress-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #d7d1c8;
-}
-
-.progress-dots span.active {
-  background: var(--teal);
-}
-
-.step-content {
-  width: min(100%, 560px);
-  margin: 0 auto;
-  padding: 24px 24px 40px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.step-image-placeholder {
-  width: 100%;
-  min-height: 260px;
-
-  border-radius: 28px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-
-  display: grid;
-  place-items: center;
-
-  color: var(--text-muted);
-  font-size: 18px;
-  font-weight: 700;
-
-  margin-bottom: 34px;
-}
-
-.step-content h1 {
-  margin: 0 0 36px;
-
-  color: var(--navy);
-  font-size: 34px;
-  line-height: 1.15;
-  text-align: center;
-  font-weight: 800;
-}
-
-.step-actions {
-  width: 100%;
-  display: flex;
-  gap: 14px;
-}
-
-.step-button {
-  min-height: 72px;
-  border-radius: 20px;
-
-  font-size: 23px;
-  font-weight: 800;
-
-  flex: 1;
-}
-
-.step-button.primary {
-  background: var(--teal);
-  color: white;
-}
-
-.step-button.secondary {
-  background: var(--surface);
-  color: var(--teal);
-  border: 2px solid var(--teal);
-}
-
-.emergency-step-page .call-1122-bar {
-  bottom: 0;
-}.emergency-step-page {
-  padding-bottom: 86px;
-}
-
-.emergency-step-page .panic-header {
-  position: relative;
-  justify-content: flex-start;
-}
-
-.progress-dots {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-
-  display: flex;
-  gap: 8px;
-}
-
-.progress-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #d7d1c8;
-}
-
-.progress-dots span.active {
-  background: var(--teal);
-}
-
-.step-content {
-  width: min(100%, 560px);
-  margin: 0 auto;
-  padding: 24px 24px 40px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.step-image-placeholder {
-  width: 100%;
-  min-height: 260px;
-
-  border-radius: 28px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-
-  display: grid;
-  place-items: center;
-
-  color: var(--text-muted);
-  font-size: 18px;
-  font-weight: 700;
-
-  margin-bottom: 34px;
-}
-
-.step-content h1 {
-  margin: 0 0 36px;
-
-  color: var(--navy);
-  font-size: 34px;
-  line-height: 1.15;
-  text-align: center;
-  font-weight: 800;
-}
-
-.step-actions {
-  width: 100%;
-  display: flex;
-  gap: 14px;
-}
-
-.step-button {
-  min-height: 72px;
-  border-radius: 20px;
-
-  font-size: 23px;
-  font-weight: 800;
-
-  flex: 1;
-}
-
-.step-button.primary {
-  background: var(--teal);
-  color: white;
-}
-
-.step-button.secondary {
-  background: var(--surface);
-  color: var(--teal);
-  border: 2px solid var(--teal);
-}
-
-.emergency-step-page .call-1122-bar {
-  bottom: 0;
-}
-
-.what-now-page {
-  min-height: 100vh;
-  background: var(--bg);
-  padding-bottom: 88px;
-}
-
-.what-now-content {
-  width: min(100%, 640px);
-  margin: 0 auto;
-  padding: 12px 24px 40px;
-}
-
-.what-now-heading {
-  margin-bottom: 34px;
-}
-
-.what-now-heading h1 {
-  font-size: 38px;
-  margin-bottom: 8px;
-}
-
-.what-now-heading p {
-  font-size: 18px;
-}
-
-.what-now-section {
-  margin-bottom: 32px;
-}
-
-.what-now-section h2 {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.emergency-number-card,
-.contact-call-card {
-  min-height: 76px;
-  margin-bottom: 12px;
-  padding: 16px 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-
-  color: var(--navy);
-}
-
-.emergency-number-card div,
-.contact-call-card div,
-.emergency-number-card span:first-child {
-  display: flex;
-  flex-direction: column;
-}
-
-.emergency-number-card strong,
-.contact-call-card strong {
-  font-size: 18px;
-}
-
-.emergency-number-card small,
-.contact-call-card small {
-  margin-top: 3px;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.emergency-number-card > span:last-child,
-.contact-call-card > span:last-child {
-  color: var(--teal);
-  font-weight: 800;
-}
-
-.first-contact {
-  margin-left: 6px;
-  color: var(--teal);
-  font-size: 13px;
-}
-
-.what-now-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.what-now-button {
-  width: 100%;
-  min-height: 64px;
-  border-radius: 18px;
-
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.what-now-button.primary {
-  background: var(--teal);
-  color: white;
-}
-
-.what-now-button.secondary {
-  background: var(--surface);
-  color: var(--teal);
-  border: 2px solid var(--teal);
-}
-
-.what-now-page .call-1122-bar {
-  bottom: 0;
-}
-
-
-/* Prepare hub */
-
-.prepare-heading {
-  margin-bottom: 28px;
-}
-
-.prepare-heading h2 {
-  font-size: 34px;
-  margin-bottom: 8px;
-}
-
-.prepare-heading p {
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.preparedness-card {
-  padding: 20px;
-  margin-bottom: 28px;
-  background: var(--teal-light);
-  border-radius: 20px;
-}
-
-.preparedness-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-  color: var(--teal);
-  font-size: 17px;
-}
-
-.preparedness-track {
-  width: 100%;
-  height: 12px;
-  background: #cbdedb;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.preparedness-fill {
-  height: 100%;
-  background: var(--teal);
-  border-radius: 20px;
-  transition: width 0.3s ease;
-}
-
-.prepare-card {
-  width: 100%;
-  min-height: 104px;
-  padding: 18px;
-  margin-bottom: 16px;
-
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-
-  text-align: left;
-  color: var(--navy);
-
-  box-shadow: 0 2px 8px rgba(28, 37, 65, 0.05);
-}
-
-.prepare-icon {
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 16px;
-  background: var(--teal-light);
-  color: var(--teal);
-
-  font-size: 28px;
-  font-weight: 800;
-}
-
-.prepare-card-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.prepare-card-text strong {
-  font-size: 19px;
-  font-weight: 800;
-}
-
-.prepare-card-text small {
-  font-size: 15px;
-  line-height: 1.4;
-  color: var(--text-muted);
-}
-
-.prepare-card:active {
-  transform: scale(0.98);
-}
-
-/* Emergency Plan */
-
-.plan-page > .back-button {
-  margin-bottom: 24px;
-}
-
-.plan-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.plan-section h3 {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
-
-.plan-section p {
-  font-size: 15px;
-  margin-bottom: 18px;
-}
-
-.meeting-point-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.plan-section input,
-.plan-section textarea {
-  width: 100%;
-  min-width: 0;
-  padding: 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--navy);
-  font-size: 16px;
-}
-
-.plan-section input:focus,
-.plan-section textarea:focus {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
-}
-
-.plan-section textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.remove-point-button {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  border-radius: 12px;
-  background: var(--amber-light);
-  color: var(--amber);
-  font-size: 26px;
-}
-
-.add-point-button {
-  min-height: 48px;
-  padding: 12px 16px;
-  flex-shrink: 0;
-  background: var(--teal);
-  color: white;
-  border-radius: 12px;
-  font-weight: 700;
-}
-
-.add-point-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.prepare-save-button {
-  width: 100%;
-  min-height: 56px;
-  background: var(--teal);
-  color: white;
-  border-radius: 16px;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.save-message {
-  color: var(--teal);
-  text-align: center;
-  font-weight: 700;
-  margin-top: 14px;
-}
-
-
-/* Kit Checklist */
-
-.checklist-page > .back-button {
-  margin-bottom: 24px;
-}
-
-.checklist-count {
-  margin: 12px 0 0;
-  font-size: 14px;
-  color: var(--teal);
-}
-
-.checklist-category {
-  margin-bottom: 24px;
-}
-
-.checklist-category h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  font-weight: 800;
-}
-
-.checklist-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
-  min-height: 60px;
-  padding: 16px;
-  margin-bottom: 8px;
-
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  font-size: 17px;
-  cursor: pointer;
-}
-
-.checklist-row input {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  accent-color: var(--teal);
-  cursor: pointer;
-}
-
-.checklist-row.checked {
-  background: var(--teal-light);
-  border-color: var(--teal);
-}
-
-.checklist-row.checked span {
-  text-decoration: line-through;
-  color: var(--teal);
-}
-
-/* Emergency Contacts */
-
-.contacts-page > .back-button {
-  margin-bottom: 24px;
-}
-
-.saved-contact-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px;
-  margin-bottom: 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-}
-
-.contact-avatar {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--teal-light);
-  color: var(--teal);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.saved-contact-details {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  overflow-wrap: anywhere;
-}
-
-.saved-contact-details small {
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.primary-contact-label {
-  color: var(--teal);
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.contact-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.contact-actions button {
-  min-height: 44px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: var(--teal-light);
-  color: var(--teal);
-  font-weight: 700;
-}
-
-.contact-actions button:last-child {
-  background: var(--amber-light);
-  color: var(--amber);
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  margin-top: 24px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-}
-
-.contact-form h3 {
-  font-size: 22px;
-  margin-bottom: 20px;
-}
-
-.contact-form > label {
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.contact-form > input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 18px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--navy);
-}
-
-.first-contact-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  margin-bottom: 20px !important;
-}
-
-.first-contact-checkbox input {
-  width: 22px;
-  height: 22px;
-  accent-color: var(--teal);
-}
-
-.cancel-edit-button {
-  min-height: 48px;
-  margin-top: 12px;
-  background: var(--teal-light);
-  color: var(--teal);
-  border-radius: 12px;
-  font-weight: 700;
-}
-
-.prepare-intro {
-  padding: 24px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.intro-signin,
-.intro-signup {
-  min-height: 56px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.intro-signin {
-  background: var(--teal);
-  color: white;
-}
-
-.intro-signup {
-  border: 2px solid var(--teal);
-  color: var(--teal);
-}
-
-.emergency-tile.medical .emergency-icon {
-  color: var(--teal);
-}
-
-.emergency-tile.disaster .emergency-icon {
-  color: var(--navy);
-}
-
-.emergency-icon svg {
-  display: block;
-}
-
-.custom-emergency-icon {
-  width: 40px;
-  height: 40px;
-  display: block;
-}
-
-.back-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.back-button svg {
-  display: block;
-  flex-shrink: 0;
-}
-
-.profile-button {
-  padding: 0;
-}
-
-.bottom-nav a {
-  flex-direction: column;
-  gap: 4px;
-  font-size: 13px;
-}
-
-.bottom-nav svg {
-  flex-shrink: 0;
-}
-
-.call-1122-bar {
-  gap: 12px;
-}
-
-/* Home contact bottom sheet */
+/* ============================================================
+   06. Home — contact bottom sheet
+   ============================================================ */
 
 .contact-overlay {
   position: fixed;
@@ -1348,4 +736,777 @@ p {
   color: var(--teal);
   font-weight: 800;
   font-size: 17px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-sheet {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   07. Emergency mode — shared Panic layout
+   ============================================================ */
+
+.panic-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 86px;
+}
+
+.panic-header {
+  height: 74px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   08. Emergency Picker — medical and disaster tiles
+   ============================================================ */
+
+.picker-content {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: 8px 22px 28px;
+}
+
+.picker-content h1 {
+  font-size: 38px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.emergency-section {
+  margin-bottom: 28px;
+}
+
+.emergency-section h2 {
+  font-size: 17px;
+  letter-spacing: 0.3px;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.emergency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.emergency-tile {
+  min-height: 160px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--navy);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  padding: 18px;
+  text-align: center;
+
+  font-size: 20px;
+  line-height: 1.15;
+  font-weight: 800;
+
+  box-shadow: 0 2px 8px rgba(28, 37, 65, 0.04);
+}
+
+.emergency-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+}
+
+.emergency-tile.medical .emergency-icon {
+  background: var(--teal-light);
+  color: var(--teal);
+}
+
+.emergency-tile.disaster .emergency-icon {
+  background: var(--amber-light);
+  color: var(--navy);
+}
+
+.emergency-tile:active {
+  transform: scale(0.98);
+}
+
+.emergency-picker-page .call-1122-bar {
+  bottom: 0;
+}
+
+@media (max-width: 480px) {
+  .picker-content h1 {
+    font-size: 34px;
+  }
+
+  .emergency-tile {
+    min-height: 150px;
+    font-size: 18px;
+  }
+}
+
+.emergency-icon svg {
+  display: block;
+}
+
+.custom-emergency-icon {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+/* ============================================================
+   09. Emergency Steps — illustrations, progress and actions
+   ============================================================ */
+
+.emergency-step-page {
+  padding-bottom: 86px;
+}
+
+.emergency-step-page .panic-header {
+  position: relative;
+  justify-content: flex-start;
+}
+
+.progress-dots {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  gap: 8px;
+}
+
+.progress-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d7d1c8;
+}
+
+.progress-dots span.active {
+  background: var(--teal);
+}
+
+.step-content {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  padding: 24px 24px 40px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-image-placeholder {
+  width: 100%;
+  min-height: 260px;
+
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  display: grid;
+  place-items: center;
+
+  color: var(--text-muted);
+  font-size: 18px;
+  font-weight: 700;
+
+  margin-bottom: 34px;
+}
+
+.step-content h1 {
+  margin: 0 0 36px;
+
+  color: var(--navy);
+  font-size: 34px;
+  line-height: 1.15;
+  text-align: center;
+  font-weight: 800;
+}
+
+.step-actions {
+  width: 100%;
+  display: flex;
+  gap: 14px;
+}
+
+.step-button {
+  min-height: 72px;
+  border-radius: 20px;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  flex: 1;
+}
+
+.step-button.primary {
+  background: var(--teal);
+  color: white;
+}
+
+.step-button.secondary {
+  background: var(--surface);
+  color: var(--teal);
+  border: 2px solid var(--teal);
+}
+
+.emergency-step-page .call-1122-bar {
+  bottom: 0;
+}
+
+/* ============================================================
+   10. What Now — additional help, contacts and navigation
+   ============================================================ */
+
+.what-now-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 88px;
+}
+
+.what-now-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.what-now-heading {
+  margin-bottom: 34px;
+}
+
+.what-now-heading h1 {
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+.what-now-heading p {
+  font-size: 18px;
+}
+
+.what-now-section {
+  margin-bottom: 32px;
+}
+
+.what-now-section h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.emergency-number-card,
+.contact-call-card {
+  min-height: 76px;
+  margin-bottom: 12px;
+  padding: 16px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  color: var(--navy);
+}
+
+.emergency-number-card div,
+.contact-call-card div,
+.emergency-number-card span:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.emergency-number-card strong,
+.contact-call-card strong {
+  font-size: 18px;
+}
+
+.emergency-number-card small,
+.contact-call-card small {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.emergency-number-card > span:last-child,
+.contact-call-card > span:last-child {
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.first-contact {
+  margin-left: 6px;
+  color: var(--teal);
+  font-size: 13px;
+}
+
+.what-now-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.what-now-button {
+  width: 100%;
+  min-height: 64px;
+  border-radius: 18px;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.what-now-button.primary {
+  background: var(--teal);
+  color: white;
+}
+
+.what-now-button.secondary {
+  background: var(--surface);
+  color: var(--teal);
+  border: 2px solid var(--teal);
+}
+
+.what-now-page .call-1122-bar {
+  bottom: 0;
+}
+
+.what-now-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--teal);
+  font-weight: 800;
+  background: transparent;
+}
+
+.what-now-call:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   11. Prepare — shared heading, progress and save controls
+   ============================================================ */
+
+.prepare-heading {
+  margin-bottom: 28px;
+}
+
+.prepare-heading h2 {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.prepare-heading p {
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.preparedness-card {
+  padding: 20px;
+  margin-bottom: 28px;
+  background: var(--teal-light);
+  border-radius: 20px;
+}
+
+.preparedness-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: var(--teal);
+  font-size: 17px;
+}
+
+.preparedness-track {
+  width: 100%;
+  height: 12px;
+  background: #cbdedb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.preparedness-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.prepare-save-button {
+  width: 100%;
+  min-height: 56px;
+  background: var(--teal);
+  color: white;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.save-message {
+  color: var(--teal);
+  text-align: center;
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+/* ============================================================
+   12. Prepare hub — feature cards
+   ============================================================ */
+
+.prepare-card {
+  width: 100%;
+  min-height: 104px;
+  padding: 18px;
+  margin-bottom: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+
+  text-align: left;
+  color: var(--navy);
+
+  box-shadow: 0 2px 8px rgba(28, 37, 65, 0.05);
+}
+
+.prepare-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+  background: var(--teal-light);
+  color: var(--teal);
+
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.prepare-card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.prepare-card-text strong {
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.prepare-card-text small {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.prepare-card:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================
+   13. Prepare intro — signed-out screen
+   ============================================================ */
+
+.prepare-intro {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.intro-signin,
+.intro-signup {
+  min-height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.intro-signin {
+  background: var(--teal);
+  color: white;
+}
+
+.intro-signup {
+  border: 2px solid var(--teal);
+  color: var(--teal);
+}
+
+/* ============================================================
+   14. Emergency Plan — meeting points and notes
+   ============================================================ */
+
+.plan-page > .back-button {
+  margin-bottom: 24px;
+}
+
+.plan-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.plan-section h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.plan-section p {
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.meeting-point-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.plan-section input,
+.plan-section textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--navy);
+  font-size: 16px;
+}
+
+.plan-section input:focus,
+.plan-section textarea:focus {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.plan-section textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.remove-point-button {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--amber-light);
+  color: var(--amber);
+  font-size: 26px;
+}
+
+.add-point-button {
+  min-height: 48px;
+  padding: 12px 16px;
+  flex-shrink: 0;
+  background: var(--teal);
+  color: white;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.add-point-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   15. Kit Checklist — categories and checkboxes
+   ============================================================ */
+
+.checklist-page > .back-button {
+  margin-bottom: 24px;
+}
+
+.checklist-count {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--teal);
+}
+
+.checklist-category {
+  margin-bottom: 24px;
+}
+
+.checklist-category h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.checklist-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  min-height: 60px;
+  padding: 16px;
+  margin-bottom: 8px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.checklist-row input {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+
+.checklist-row.checked {
+  background: var(--teal-light);
+  border-color: var(--teal);
+}
+
+.checklist-row.checked span {
+  text-decoration: line-through;
+  color: var(--teal);
+}
+
+/* ============================================================
+   16. Emergency Contacts — saved contacts and form
+   ============================================================ */
+
+.contacts-page > .back-button {
+  margin-bottom: 24px;
+}
+
+.saved-contact-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.saved-contact-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+
+.saved-contact-details small {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.primary-contact-label {
+  color: var(--teal);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-actions button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.contact-actions button:last-child {
+  background: var(--amber-light);
+  color: var(--amber);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+
+.contact-form h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.contact-form > label {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.contact-form > input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--navy);
+}
+
+.first-contact-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin-bottom: 20px !important;
+}
+
+.first-contact-checkbox input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--teal);
+}
+
+.cancel-edit-button {
+  min-height: 48px;
+  margin-top: 12px;
+  background: var(--teal-light);
+  color: var(--teal);
+  border-radius: 12px;
+  font-weight: 700;
 }

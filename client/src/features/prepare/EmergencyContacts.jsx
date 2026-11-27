@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import { ArrowLeft } from '@phosphor-icons/react'
+import { EmptyState } from '../../components/UIStates'
 
 const emptyForm = {
   name: '',
@@ -98,7 +99,10 @@ function EmergencyContacts() {
         </div>
 
         {contacts.length === 0 && (
-          <p>No contacts yet. Add a person below.</p>
+          <EmptyState
+            title="No contacts yet"
+            message="Add someone you trust using form below"
+          />
         )}
 
         {contacts.map(contact => (
@@ -149,6 +153,9 @@ function EmergencyContacts() {
           <input
             required
             type="tel"
+            inputMode="tel"
+            pattern="(\+92|0)3[0-9]{9}"
+            title="Enter a Pakistani mobile number, e.g. 03001234567 or +923001234567"
             value={form.phone}
             placeholder="03XXXXXXXXX"
             onChange={e => updateField('phone', e.target.value)}

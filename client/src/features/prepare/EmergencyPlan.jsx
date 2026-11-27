@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Layout from '../../components/Layout'
-import { ArrowLeft } from '@phosphor-icons/react'
 
+import Layout from '../../components/Layout'
+import Button from '../../components/Button'
+import Card from '../../components/Card'
+import PageHeader from '../../components/PageHeader'
 
 function EmergencyPlan() {
   const navigate = useNavigate()
@@ -45,20 +47,14 @@ function EmergencyPlan() {
     <Layout>
       <section className="plan-page">
 
-        <button
-          className="back-button"
-          onClick={() => navigate('/prepare')}
-          aria-label="Back to Prepare"
-        >
-          <ArrowLeft size={26} weight="bold" />
-        </button>
+        <PageHeader
+          title="Emergency plan"
+          subtitle="Make a plan before an emergency happens."
+          onBack={() => navigate('/prepare')}
+        />
 
-        <div className="prepare-heading">
-          <h2>Emergency plan</h2>
-          <p>Make a plan before an emergency happens.</p>
-        </div>
-
-        <section className="plan-section">
+        {/* Meeting points */}
+        <Card className="plan-section">
           <h3>Meeting points</h3>
 
           <p>
@@ -70,7 +66,7 @@ function EmergencyPlan() {
               <input
                 aria-label={`Meeting point ${index + 1}`}
                 value={point}
-                onChange={(e) =>
+                onChange={e =>
                   updateMeetingPoint(index, e.target.value)
                 }
               />
@@ -90,7 +86,7 @@ function EmergencyPlan() {
               aria-label="New meeting point"
               placeholder="Enter a meeting point"
               value={newPoint}
-              onChange={(e) => setNewPoint(e.target.value)}
+              onChange={e => setNewPoint(e.target.value)}
             />
 
             <button
@@ -101,35 +97,39 @@ function EmergencyPlan() {
               + Add
             </button>
           </div>
-        </section>
+        </Card>
 
-        <section className="plan-section">
+        {/* Additional notes */}
+        <Card className="plan-section">
           <h3>Additional notes</h3>
 
-          <p>Include anything important for your emergency plan.</p>
+          <p>
+            Include anything important for your emergency plan.
+          </p>
 
           <textarea
             aria-label="Additional notes"
             placeholder="Write your notes here..."
             value={notes}
-            onChange={(e) => {
+            onChange={e => {
               setNotes(e.target.value)
               setSaved(false)
             }}
             rows={5}
           />
-        </section>
+        </Card>
 
-        <button
+        {/* Save plan */}
+        <Button
           className="prepare-save-button"
           onClick={savePlan}
         >
           Save plan
-        </button>
+        </Button>
 
         {saved && (
           <p className="save-message" role="status">
-            Plan saved for this session.
+            Plan updated for this page.
           </p>
         )}
 
