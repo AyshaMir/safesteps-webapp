@@ -1,0 +1,17 @@
+[
+  { "name": "Clean water, 3 days", "category": "water" },
+  { "name": "Water purification tablets", "category": "water" },
+  { "name": "Dry food that keeps, 3 days", "category": "food" },
+  { "name": "Can opener", "category": "food" },
+  { "name": "First aid kit", "category": "medical" },
+  { "name": "Regular medicines, 1 week", "category": "medical" },
+  { "name": "Face masks", "category": "medical" },
+  { "name": "Copies of CNIC", "category": "documents" },
+  { "name": "Emergency contact list on paper", "category": "documents" },
+  { "name": "Torch", "category": "tools" },
+  { "name": "Spare batteries", "category": "tools" },
+  { "name": "Power bank, charged", "category": "tools" },
+  { "name": "Whistle", "category": "tools" },
+  { "name": "Some cash", "category": "other" },
+  { "name": "Change of clothes", "category": "other" }
+]
