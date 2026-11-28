@@ -1,21 +1,69 @@
+import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Layout from '../../components/Layout'
 import { PhoneCall } from '@phosphor-icons/react'
+
+import Layout from '../../components/Layout'
 import { emergencyNumbers } from '../../config/emergencyNumbers'
-
-
-const mockContacts = [
-  { name: 'Mum', phone: '', first: true },
-  { name: 'Sara', phone: '', first: false },
-]
+import { useAuth } from '../../context/useAuth'
+import { api } from '../../api/api'
 
 function WhatNow() {
   const navigate = useNavigate()
   const { slug } = useParams()
+  const { user, ready } = useAuth()
 
-  const contacts = [...mockContacts].sort(
-    (a, b) => Number(b.first) - Number(a.first)
-  )
+  const [contactResult, setContactResult] = useState(null)
+  const [retryCount, setRetryCount] = useState(0)
+
+  const userId = user?.id
+
+  // Load saved contacts only for authenticated users
+  useEffect(() => {
+    if (!userId) return
+
+    let cancelled = false
+
+    api('/prepare')
+      .then(data => {
+        if (cancelled) return
+
+        const contacts = [...(data.contacts ?? [])].sort(
+          (a, b) => Number(b.first) - Number(a.first)
+        )
+
+        setContactResult({
+          userId,
+          retryCount,
+          contacts,
+          error: '',
+        })
+      })
+      .catch(() => {
+        if (cancelled) return
+
+        setContactResult({
+          userId,
+          retryCount,
+          contacts: [],
+          error: 'Saved contacts are currently unavailable.',
+        })
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [userId, retryCount])
+
+  const result =
+    userId &&
+    contactResult?.userId === userId &&
+    contactResult?.retryCount === retryCount
+      ? contactResult
+      : null
+
+  const contacts = result?.contacts ?? []
+  const loading = !!userId && !result
+  const error = result?.error ?? ''
 
   return (
     <Layout>
@@ -26,7 +74,7 @@ function WhatNow() {
           <p>Find additional help and support below.</p>
         </div>
 
-        {/* Other emergency numbers */}
+        {/* Other emergency numbers — available to everyone */}
         <section className="what-now-section">
           <h2>Other emergency numbers</h2>
 
@@ -53,9 +101,64 @@ function WhatNow() {
         <section className="what-now-section">
           <h2>Your contacts</h2>
 
-          {contacts.map(contact => (
+          {/* Signed-out users */}
+          {ready && !user && (
+            <p>
+              Sign in from the home page to access your
+              saved emergency contacts.
+            </p>
+          )}
+
+          {/* Loading */}
+          {(!ready || loading) && (
             <div
-              key={contact.name}
+              className="loading-state"
+              role="status"
+              aria-busy="true"
+            >
+              <div className="skeleton skeleton-card" />
+            </div>
+          )}
+
+          {/* Error */}
+          {user && error && (
+            <div className="ui-state error-state" role="alert">
+              <p>{error}</p>
+
+              <button
+                onClick={() =>
+                  setRetryCount(count => count + 1)
+                }
+              >
+                Try again
+              </button>
+            </div>
+          )}
+
+          {/* No saved contacts */}
+          {user && !loading && !error &&
+            contacts.length === 0 && (
+              <div className="ui-state empty-state">
+                <h3>No emergency contacts yet</h3>
+
+                <p>
+                  Add people you trust to your emergency contacts.
+                </p>
+
+                <button
+                  onClick={() =>
+                    navigate('/prepare/contacts')
+                  }
+                >
+                  Add contacts
+                </button>
+              </div>
+            )}
+
+          {/* Actual saved contacts */}
+          {user && contacts.map(contact => (
+            <div
+              key={contact._id}
               className="contact-call-card"
             >
               <div>
@@ -69,28 +172,17 @@ function WhatNow() {
                   )}
                 </strong>
 
-                <small>
-                  {contact.phone || 'Demo contact'}
-                </small>
+                <small>{contact.phone}</small>
               </div>
 
-              {contact.phone ? (
-                <a
-                  className="what-now-call"
-                  href={`tel:${contact.phone}`}
-                >
-                  <PhoneCall size={22} weight="duotone" />
-                  Call
-                </a>
-              ) : (
-                <button
-                  className="what-now-call"
-                  disabled
-                >
-                  <PhoneCall size={22} weight="duotone" />
-                  Call
-                </button>
-              )}
+              <a
+                className="what-now-call"
+                href={`tel:${contact.phone}`}
+                aria-label={`Call ${contact.name}`}
+              >
+                <PhoneCall size={22} weight="duotone" />
+                Call
+              </a>
             </div>
           ))}
         </section>

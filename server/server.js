@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/prepare', require('./routes/prepare'));
 app.use('/api/checklist', checklist.publicRouter);
 app.use('/api/admin/checklist', checklist.adminRouter);
 

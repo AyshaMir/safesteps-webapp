@@ -7,9 +7,12 @@ import WarningBox from '../../components/WarningBox';
 import { api } from '../../api/api';
 import { useAuth } from '../../context/useAuth';
 import { MIN_PASSWORD, checkName, checkNewPassword, compact } from './validate';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, offlineSession } = useAuth();
+  const isOnline = useOnlineStatus();
+  const canEdit = isOnline && !offlineSession;
   const navigate = useNavigate();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
@@ -18,6 +21,34 @@ export default function ProfilePage() {
     navigate('/', { replace: true });
   }
 
+  if (!canEdit) {
+  return (
+    <Layout>
+      <div className="profile">
+        <div className="profile__head">
+          <span className="profile__avatar" aria-hidden="true">
+            {user.name.trim().charAt(0).toUpperCase()}
+          </span>
+
+          <div>
+            <h1 className="h1">{user.name}</h1>
+            <p className="muted">{user.email}</p>
+          </div>
+        </div>
+
+        <WarningBox title="Account changes are unavailable">
+          Reconnect to SafeSteps to manage your account.
+        </WarningBox>
+
+        <section className="section">
+          <Button variant="secondary" onClick={onLogout}>
+            Log out
+          </Button>
+        </section>
+      </div>
+    </Layout>
+  );
+}
   if (confirmingDelete) {
     return <DeleteConfirm onCancel={() => setConfirmingDelete(false)} />;
   }

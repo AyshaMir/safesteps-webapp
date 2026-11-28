@@ -2,8 +2,8 @@ import { Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import ProtectedRoute from './ProtectedRoute';
 import NoAccessPage from './NoAccessPage';
+import useOnlineStatus from '../../hooks/useOnlineStatus';
 
-// Logged out → Login and back. Logged in but not admin → No access screen.
 export default function AdminRoute({ children }) {
   return (
     <ProtectedRoute>
@@ -13,6 +13,14 @@ export default function AdminRoute({ children }) {
 }
 
 function AdminOnly({ children }) {
-  const { user } = useAuth();
-  return user.role === 'admin' ? children : <NoAccessPage />;
+  const { user, offlineSession } = useAuth();
+  const isOnline = useOnlineStatus();
+
+  if (!isOnline || offlineSession) {
+    return <NoAccessPage />;
+  }
+
+  return user?.role === 'admin'
+    ? children
+    : <NoAccessPage />;
 }
