@@ -1,7 +1,11 @@
 import { UserCircle } from '@phosphor-icons/react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/useAuth'
+
 function Header() {
   const navigate = useNavigate()
+  const { user, ready } = useAuth()
+
   return (
     <header className="app-header">
       <h1>SafeSteps</h1>
@@ -14,9 +18,10 @@ function Header() {
 
       <button
         className="profile-button"
-        onClick={() => navigate('/profile')}
+        onClick={() => navigate(user ? '/profile' : '/login')}
         type="button"
-        aria-label="Profile"
+        disabled={!ready}
+        aria-label={user ? 'Profile' : 'Sign in'}
       >
         <UserCircle size={30} weight="duotone" />
       </button>

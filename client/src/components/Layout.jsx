@@ -4,11 +4,11 @@ import BottomNav from './BottomNav'
 import { OfflineState } from './UIStates'
 import useOnlineStatus from '../hooks/useOnlineStatus'
 
-function Layout({ children }) {
+function Layout({ children, tabs = true }) {
   const isOnline = useOnlineStatus()
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${!tabs ? 'no-tabs' : ''}`}>
       <Header />
 
       <main className="page-content">
@@ -17,7 +17,7 @@ function Layout({ children }) {
       </main>
 
       <Call1122Bar />
-      <BottomNav />
+      {tabs && <BottomNav />}
     </div>
   )
 }

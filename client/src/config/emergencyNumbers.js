@@ -5,3 +5,14 @@ export const emergencyNumbers = [
   { name: 'Fire', phone: '16' },
   { name: 'Edhi', phone: '115' },
 ]
+
+// Compatibility with Person 3's components
+export const RESCUE = {
+  number: RESCUE_NUMBER,
+  label: 'Rescue',
+}
+
+export const OTHER_NUMBERS = emergencyNumbers.map(service => ({
+  number: service.phone,
+  label: service.name,
+}))

@@ -16,6 +16,10 @@
    14. Emergency Plan — meeting points and notes
    15. Kit Checklist — categories and checkboxes
    16. Emergency Contacts — saved contacts and form
+   17. Integration — shared tokens and compatibility
+   18. Authentication and profile
+   19. Admin dashboard and checklist management
+   20. Home sign-in prompt
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
@@ -1510,3 +1514,158 @@ p {
   border-radius: 12px;
   font-weight: 700;
 }
+/* ============================================================
+   17. Integration — shared tokens and compatibility
+   ============================================================ */
+:root {
+  --text: var(--navy);
+  --muted: var(--text-muted);
+  --call-red: var(--red);
+  --panel-tint: #e3eef0;
+  --warm-tint: #fcebd3;
+  --teal-tint: var(--teal-light);
+  --neutral-fill: #efeae1;
+  --line: var(--border);
+  --line-strong: #8a93a0;
+  --success: #2f6b1c;
+  --success-bg: #e6f2dc;
+  --warning: var(--amber);
+  --warning-bg: var(--amber-light);
+  --offline: var(--text-muted);
+  --offline-bg: #e9ecf0;
+  --r-check: 8px;
+  --r-field: 14px;
+  --r-btn: 16px;
+  --r-card: 24px;
+  --r-pill: 999px;
+  --gutter: 16px;
+}
+.app-shell.no-tabs { padding-bottom: 68px; }
+.app-shell.no-tabs .call-1122-bar { bottom: 0; }
+.app-shell.no-tabs .desktop-nav { display: none; }
+.shared-button.warning { background: var(--warning); color: white; }
+.h1 { font-size: 26px; line-height: 1.2; font-weight: 800; margin: 0; }
+.h2 { font-size: 20px; line-height: 1.3; font-weight: 700; margin: 0; }
+.lead { margin: 0; }
+.muted { color: var(--muted); font-size: 14px; line-height: 1.4; font-weight: 600; margin: 0; }
+.btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 56px; padding: 0 20px;
+  border-radius: var(--r-btn); font: inherit; font-size: 19px;
+  line-height: 1; font-weight: 700; cursor: pointer; text-decoration: none;
+}
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn--primary { background: var(--teal); color: white; border: 0; }
+.btn--secondary { background: var(--surface); color: var(--teal); border: 2px solid var(--teal); }
+.btn--warning { background: var(--warning); color: white; border: 0; }
+.btn--neutral { background: var(--neutral-fill); color: var(--text); border: 0; }
+.btn--small { min-height: 48px; width: auto; font-size: 15px; margin-top: 12px; }
+.text-btn { background: none; border: 0; padding: 0 8px; min-height: 48px; font: inherit; font-size: 15px; font-weight: 700; color: var(--teal); cursor: pointer; }
+.text-btn--warning { color: var(--warning); align-self: center; }
+.field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.field__label { font-size: 15px; line-height: 1.3; font-weight: 700; }
+.field__input { height: 56px; padding: 0 16px; border: 2px solid var(--line-strong); border-radius: var(--r-field); background: var(--surface); font: inherit; font-size: 17px; color: var(--text); width: 100%; min-width: 0; }
+.field__input:focus { outline: none; border: 3px solid var(--teal); padding: 0 15px; }
+.field--error .field__input { border-color: var(--warning); }
+.field--readonly .field__input { background: var(--neutral-fill); border-color: var(--line); color: var(--muted); }
+.field__hint { margin: 0; font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--muted); }
+.field__error { margin: 0; display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.3; font-weight: 700; color: var(--warning); }
+.bang { flex: none; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: var(--r-pill); background: var(--warning); color: white; font-size: 14px; font-weight: 800; line-height: 1; }
+.bang--lg { width: 28px; height: 28px; font-size: 17px; }
+.bang--xl { width: 56px; height: 56px; font-size: 30px; }
+.warning-box { display: flex; gap: 12px; padding: 16px; border-radius: var(--r-field); background: var(--warning-bg); color: var(--warning); }
+.warning-box__title { margin: 0; font-weight: 700; color: inherit; }
+.warning-box__body { font-size: 15px; }
+.status { margin: 0; display: inline-flex; align-self: flex-start; gap: 8px; padding: 8px 12px; border-radius: var(--r-pill); font-size: 15px; font-weight: 700; }
+.status--success { background: var(--success-bg); color: var(--success); }
+.empty { margin: 0; color: var(--muted); }
+/* Only Ibad's skeleton containers, not existing skeleton cards. */
+.skeleton:has(> .skeleton__block) { display: flex; flex-direction: column; gap: 12px; background: transparent; animation: none; }
+.skeleton__block { height: 56px; border-radius: var(--r-field); background: var(--neutral-fill); animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton__block--title { height: 32px; width: 50%; }
+.skeleton__block--short { width: 70%; }
+@media (prefers-reduced-motion: reduce) { .skeleton__block { animation: none; } }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.stack--full { width: 100%; }
+.section { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
+
+/* ============================================================
+   18. Authentication and profile
+   ============================================================ */
+.auth { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding-top: 16px; }
+.auth form .btn, .auth form .shared-button { margin-top: 4px; }
+.auth__switch { margin: 0; text-align: center; }
+.auth__switch a { display: inline-block; padding: 12px 4px; color: var(--teal); font-weight: 700; }
+.center-message { max-width: 440px; margin: 0 auto; padding-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.center-message .warning-box { text-align: left; width: 100%; }
+.center-message > .btn, .center-message > .shared-button { margin-top: 8px; }
+.center-message > .shared-button { width: 100%; }
+.profile { max-width: 520px; margin: 0 auto; }
+.profile__head { display: flex; align-items: center; gap: 16px; padding: 16px 0; overflow-wrap: anywhere; }
+.profile__avatar { width: 64px; height: 64px; flex: none; border-radius: var(--r-pill); background: var(--teal-tint); color: var(--teal); display: grid; place-items: center; font-size: 26px; font-weight: 800; }
+.profile .card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px; border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line); color: var(--text); text-decoration: none; }
+.card__title { display: block; font-size: 17px; font-weight: 800; }
+.card__sub { display: block; font-size: 14px; font-weight: 600; color: var(--muted); }
+.chevron { font-size: 28px; color: var(--teal); }
+
+/* ============================================================
+   19. Admin dashboard and checklist management
+   ============================================================ */
+.admin { min-height: 100vh; background: var(--bg); }
+.admin-header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 12px 24px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.admin-header__brand { font-size: 20px; font-weight: 800; margin-right: auto; }
+.admin-header__who { font-size: 15px; color: var(--muted); }
+.admin-header__back { font-size: 15px; color: var(--teal); font-weight: 700; text-decoration: none; padding: 12px 0; }
+.admin-body { display: flex; flex-direction: column; }
+.admin-sidebar { display: flex; gap: 4px; padding: 12px var(--gutter); border-bottom: 1px solid var(--line); overflow-x: auto; }
+.admin-sidebar a { padding: 12px 16px; border-radius: var(--r-field); color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 700; white-space: nowrap; }
+.admin-sidebar a.active { background: var(--teal-tint); color: var(--teal); }
+.admin-main { flex: 1; padding: 24px var(--gutter); max-width: 880px; min-width: 0; }
+@media (min-width: 900px) {
+  .admin-body { flex-direction: row; min-height: calc(100vh - 73px); }
+  .admin-sidebar { flex-direction: column; width: 240px; border-bottom: 0; border-right: 1px solid var(--line); padding: 24px 16px; }
+  .admin-main { padding: 32px 40px; }
+}
+.admin-page { display: flex; flex-direction: column; gap: 24px; }
+.admin-page__head { display: flex; flex-direction: column; gap: 4px; }
+.admin-group { display: flex; flex-direction: column; gap: 12px; }
+.admin-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); overflow: hidden; }
+.admin-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-height: 56px; padding: 8px 8px 8px 20px; }
+.admin-row + .admin-row { border-top: 1px solid var(--line); }
+.admin-row__name { flex: 1; min-width: 10ch; font-weight: 600; overflow-wrap: anywhere; }
+.admin-row__error { flex-basis: 100%; padding-bottom: 8px; }
+.admin-row--editing { padding: 20px; background: var(--teal-tint); }
+.status-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 8px; background: none; border: 0; font: inherit; font-size: 15px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.status-toggle::before { content: ''; width: 44px; height: 26px; border-radius: var(--r-pill); background: var(--line-strong); transition: background .15s; }
+.status-toggle__knob { width: 20px; height: 20px; border-radius: var(--r-pill); background: white; margin-left: -49px; margin-right: 25px; transition: transform .15s; }
+.status-toggle__label { width: 9ch; text-align: left; }
+.status-toggle--on { color: var(--teal); }
+.status-toggle--on::before { background: var(--teal); }
+.status-toggle--on .status-toggle__knob { transform: translateX(18px); }
+.status-toggle:disabled { opacity: .55; }
+.admin-add { padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); }
+.item-form { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.item-form__fields { display: grid; gap: 12px; }
+.item-form__actions { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 640px) {
+  .item-form__fields { grid-template-columns: 2fr 1fr; align-items: start; }
+  .item-form__actions { flex-direction: row; }
+  .item-form__actions .btn, .item-form__actions .shared-button { width: auto; min-width: 140px; }
+}
+@media (max-width: 639px) {
+  .admin-row__name { flex-basis: 100%; padding-top: 8px; }
+  .admin-row > .text-btn { margin-left: auto; }
+  .admin-row .status-toggle { padding-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .status-toggle::before, .status-toggle__knob { transition: none; } }
+
+/* ============================================================
+   20. Home sign-in prompt (for upcoming authentication wiring)
+   ============================================================ */
+.home-signin { display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: var(--r-card); background: var(--teal-tint); }
+.home-signin__head { display: flex; gap: 12px; align-items: flex-start; }
+.home-signin__icon { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--surface); color: var(--teal); }
+.home-signin__title { margin: 0; font-size: 17px; font-weight: 800; line-height: 1.3; }
+.home-signin__text { margin: 2px 0 0; font-size: 14px; font-weight: 600; line-height: 1.4; }
+.home-signin__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.home-signin__actions .btn, .home-signin__actions .shared-button { min-height: 48px; font-size: 16px; padding: 0 8px; }
